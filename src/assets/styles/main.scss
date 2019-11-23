@@ -72,6 +72,10 @@ a {
     background: transparent;
     min-height: 4.5rem;
 
+    &.with-background {
+      background-color: $dark-blue-color;
+    }
+
     &-menu {
       .navbar-item {
         color: $white;
@@ -81,6 +85,10 @@ a {
         &:hover {
           background-color: transparent;
           color: $primary;
+        }
+
+        &:focus {
+          background-color: transparent;
         }
       }
 

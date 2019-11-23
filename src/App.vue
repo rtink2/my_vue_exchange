@@ -1,30 +1,31 @@
 <template>
   <div>
-    <Header />
-    <Hero />
-    <section class="posts">
-      <div class="container">
-        <div class="posts-type">Latest Posts</div>
-        <ExchangeList />
-      </div>
-    </section>
-    <Pagination />
+    <Header :brandName="brandName" :items="menuItems" />
+    <div :class="$route.path === '/' ? '' : 'page-wrapper'">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header';
-import Hero from '@/components/Hero';
-import Pagination from '@/components/Pagination';
-import ExchangeList from '@/components/exchange/Exchange_list';
 
 export default {
   name: 'app',
   components: {
-    Header,
-    Hero,
-    Pagination,
-    ExchangeList
+    Header
+  },
+  data() {
+    return {
+      brandName: 'FriendsExchange',
+      menuItems: [
+        { text: 'Home', link: '/' },
+        { text: 'About', link: '/about' },
+        { text: 'FAQ', link: '/faq' },
+        { text: 'Login', link: '/login' },
+        { text: 'Register', link: '/register' }
+      ]
+    };
   }
 };
 </script>
@@ -33,6 +34,10 @@ export default {
 @import 'assets/styles/variables.scss';
 @import '~bulma/bulma.sass';
 @import 'assets/styles/main.scss';
+
+.page-wrapper {
+  padding-top: 8rem;
+}
 .hero-section {
   position: relative;
 }

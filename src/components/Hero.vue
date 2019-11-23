@@ -39,7 +39,7 @@
               <span>With tag of</span>
             </div>
             <div class="level-item">
-              <button @click="cancelCategory" class="button is-danger">
+              <button class="button is-danger">
                 Art
               </button>
             </div>

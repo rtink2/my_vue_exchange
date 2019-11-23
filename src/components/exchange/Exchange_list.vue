@@ -1,61 +1,70 @@
 <template>
   <div class="columns is-multiline">
-    <div class="column is-12-mobile is-6-tablet is-4-widescreen is-6-desktop">
+    <div
+      v-for="exchange in exchanges"
+      :key="exchange.id"
+      class="column is-12-mobile is-6-tablet is-4-widescreen is-6-desktop"
+    >
       <div class="item post-card bottom-border">
         <a class="item-link" href="#">
           <figure
             class="image is-2by1 item-figure background-img"
             :style="{
-              'background-image':
-                'url(https://images.unsplash.com/photo-1517457210348-703079e57d4b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80)'
+              'background-image': `url(${exchange.image})`
             }"
-            alt=""
+            alt="image"
           ></figure>
           <div class="item-featured">
-            Icon
+            <div class="exchange-icon">
+              <font-awesome-icon icon="star" />
+            </div>
           </div>
         </a>
         <div class="item-tags">
-          <a class="button is-rounded" href="#" title="Some Title">#Art</a>
+          <a
+            v-for="tag in exchange.tags"
+            :key="tag"
+            class="button is-rounded"
+            href="#"
+            title="Some Title"
+          >
+            #{{ tag }}
+          </a>
         </div>
         <h2 class="title item-title is-size-4 has-text-weight-extra-bold">
-          <a class="item-link" href="#">Some Title</a>
+          <a class="item-link" href="#">{{ exchange.title }}</a>
         </h2>
         <div class="level">
           <div class="level-left">
-            <div class="item-author">Filip Jerga</div>
+            <div class="item-author">Patricia Arquette</div>
           </div>
           <div class="level-right">
-            27th December 2019
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="column is-12-mobile is-6-tablet is-4-widescreen is-6-desktop">
-      <div class="item post-card has-border">
-        <a class="item-link" href="#">
-          <div class="item-featured">
-            Icon
-          </div>
-        </a>
-        <div class="item-tags">
-          <a class="button is-rounded" href="#" title="Some Title">#Art</a>
-        </div>
-        <h2 class="title item-title is-size-4 has-text-weight-extra-bold">
-          <a class="item-link" href="#">Some Title</a>
-        </h2>
-        <div class="item-description">
-          Aaaaaaa
-        </div>
-        <div class="level">
-          <div class="level-left">
-            <div class="item-author">Filip Jerga</div>
-          </div>
-          <div class="level-right">
-            27th December 2019
+            08 April 2019
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    exchanges: {
+      type: Array,
+      required: true
+    }
+  }
+};
+</script>
+
+<style scoped>
+.exchange-icon {
+  height: 25px;
+  width: 25px;
+  color: #ffbc8c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

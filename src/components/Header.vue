@@ -1,13 +1,13 @@
 <template>
   <header class="header">
-    <nav class="navbar">
+    <nav class="navbar" :class="$route.path === '/' ? '' : 'with-background'">
       <div class="container">
         <div class="navbar-brand">
           <a
             class="navbar-item has-text-white is-size-2 has-text-weight-bold"
             href="#"
           >
-            Your App
+            {{ brandName }}
           </a>
           <span
             role="button"
@@ -23,14 +23,33 @@
         <div id="navbar-menu" class="navbar-menu">
           <div class="navbar-end">
             <!-- Loop through the navigation items -->
-            <a class="navbar-item nav-home" href="#">Home</a>
-            <a class="navbar-item nav-style-guide" href="#">About</a>
-            <a class="navbar-item nav-features" href="#">FAQ</a>
-            <a class="navbar-item nav-tech" href="#">Login</a>
-            <a class="navbar-item nav-web" href="#">Register</a>
+            <router-link
+              v-for="item in items"
+              v-bind:key="item.text"
+              :to="item.link"
+              class="navbar-item nav-home"
+            >
+              {{ item.text }}
+            </router-link>
           </div>
         </div>
       </div>
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  // props: ['brandName', 'items'],
+  props: {
+    brandName: {
+      type: String,
+      required: true
+    },
+    items: {
+      type: Array,
+      required: true
+    }
+  }
+};
+</script>
