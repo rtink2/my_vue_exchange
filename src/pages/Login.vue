@@ -11,10 +11,10 @@
           <div class="field">
             <div class="control">
               <input
+                v-model="form.email"
                 class="input is-large"
                 type="email"
                 placeholder="Your Email"
-                autofocus=""
                 autocomplete="email"
               />
               <!-- <div class="form-error">
@@ -26,6 +26,7 @@
           <div class="field">
             <div class="control">
               <input
+                v-model="form.password"
                 class="input is-large"
                 type="password"
                 placeholder="Your Password"
@@ -36,21 +37,56 @@
               </div> -->
             </div>
           </div>
-          <button class="button is-block is-info is-large is-fullwidth">
-            Sign In
+          <button
+            @click="handleLogin"
+            type="button"
+            class="button is-block is-primary is-outlined is-rounded is-small is-fullwidth"
+          >
+            Log In
           </button>
         </form>
       </div>
+      <p>
+        <router-link to="/register" class="newUser"
+          >New User? go to Register</router-link
+        >
+        &nbsp;·&nbsp;
+      </p>
+      <p class="has-text-grey"><a>Sign In With Google</a>&nbsp;</p>
       <p class="has-text-grey">
-        <a>Sign In With Google</a>&nbsp;
-        <router-link>Sign Up</router-link> &nbsp;·&nbsp;
         <a href="../">Need Help?</a>
       </p>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        email: '',
+        password: ''
+      }
+    };
+  },
+  methods: {
+    handleLogin() {
+      this.$store
+        .dispatch('auth/signIn', this.form)
+        .then(_ => this.$router.push('/'))
+        .catch(errorMessage =>
+          this.$toasted.error(errorMessage, { duration: 3000 })
+        );
+    }
+  }
+};
+</script>
+
 <style scoped>
+.newUser {
+  color: rgb(188, 18, 245);
+}
 .hero.is-success {
   background: #f2f6fa;
 }

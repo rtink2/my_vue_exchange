@@ -51,6 +51,31 @@ a {
   transition: color 0.2s ease;
 }
 
+// Buttons
+.button.is-primary.is-outlined {
+  background-color: $secondary;
+  color: $dark-orange-color;
+  border-color: $primary;
+
+  &:hover {
+    background-color: $primary;
+    color: $secondary;
+    border-color: $secondary;
+  }
+}
+
+.button.is-primary.is-outlined.btn-modal {
+  background-color: $primary;
+    color: $secondary;
+    border-color: $secondary;
+
+  &:hover {
+    background-color: $secondary;
+  color: $dark-orange-color;
+  border-color: $primary;
+  }
+}
+
 // Global classes
 .background-img {
   background-size: cover;
