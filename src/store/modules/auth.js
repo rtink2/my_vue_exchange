@@ -11,6 +11,11 @@ export default {
   getters: {
     isAuthenticated(state) {
       return !!state.user;
+    },
+    isExchangeOwner: state => exchangeOwnerId => {
+      return (
+        state.user && exchangeOwnerId && state.user.uid === exchangeOwnerId
+      );
     }
   },
   actions: {
@@ -19,6 +24,7 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(({ user }) => {
+          // TODO: Create profile collection in Firestore
           return user;
         })
         .catch(error => {
@@ -52,6 +58,14 @@ export default {
         .then(snapshot => {
           const profile = snapshot.data();
           user.profile = profile;
+
+          if (!profile.exchanges) {
+            user.profile.exchanges = [];
+          }
+          if (!profile.sendOpportunities) {
+            user.profile.sendOpportunities = [];
+          }
+
           commit('setAuthUser', user);
           return profile;
         });
@@ -61,12 +75,44 @@ export default {
         .collection('profiles')
         .doc(profile.user)
         .update(profile)
-        .then({});
+        .then(_ => {
+          commit('setUserProfile', profile);
+          return true;
+        });
+    },
+    getUserById(_, userId) {
+      return db
+        .collection('profiles')
+        .doc(userId)
+        .get()
+        .then(snapshot => ({ ...snapshot.data(), id: snapshot.id }));
     }
   },
   mutations: {
     setAuthUser(state, user) {
       state.user = user;
+    },
+    setUserProfile(state, profile) {
+      // state.user.profile = profile
+
+      Vue.set(state.user, 'profile', profile);
+    },
+    addExchangeToUser(state, exchange) {
+      state.user.profile.exchanges.push(exchange);
+    },
+    addOpportunityToUser(state, opportunity) {
+      state.user.profile.sendOpportunities.push(opportunity);
+    },
+    changeOpportunityStatus(state, { id, status }) {
+      const index = state.user.profile.opportunities.findIndex(
+        o => o.id === id
+      );
+      Vue.set(state.user.profile.opportunities[index], 'status', status);
+    },
+    incrementUserCredit(state, creditToIncrease) {
+      const newCredit = state.user.profile.credit + creditToIncrease;
+
+      Vue.set(state.user.profile, 'credit', newCredit);
     }
   }
 };

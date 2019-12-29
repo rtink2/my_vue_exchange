@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header :brandName="brandName" :items="menuItems" />
-    <div :class="$route.path === '/' ? '' : 'page-wrapper'">
+    <div>
       <router-view />
     </div>
   </div>
@@ -35,6 +35,9 @@ export default {
 
 .page-wrapper {
   padding-top: 8rem;
+}
+.base-page {
+  padding-top: 30px;
 }
 .hero-section {
   position: relative;

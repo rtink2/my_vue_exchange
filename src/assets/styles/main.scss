@@ -66,13 +66,13 @@ a {
 
 .button.is-primary.is-outlined.btn-modal {
   background-color: $primary;
-    color: $secondary;
-    border-color: $secondary;
+  color: $secondary;
+  border-color: $secondary;
 
   &:hover {
     background-color: $secondary;
-  color: $dark-orange-color;
-  border-color: $primary;
+    color: $dark-orange-color;
+    border-color: $primary;
   }
 }
 
@@ -92,6 +92,10 @@ a {
   position: absolute;
   width: 100%;
   // border-bottom: $primary;
+
+  &.base-header {
+    position: inherit;
+  }
 
   .navbar {
     background: transparent;

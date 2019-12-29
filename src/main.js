@@ -2,8 +2,9 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-
+import Vuelidate from 'vuelidate';
 import Toasted from 'vue-toasted';
+
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -17,6 +18,7 @@ library.add(faStar);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(Toasted);
+Vue.use(Vuelidate);
 
 Vue.config.productionTip = false;
 

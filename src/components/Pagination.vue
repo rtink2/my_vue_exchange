@@ -1,25 +1,39 @@
 <template>
-  <nav
-    class="pagination is-rounded  is-centered"
-    role="navigation"
-    aria-label="pagination"
-  >
+  <nav class="pagination is-rounded  is-centered" role="navigation" aria-label="pagination">
     <ul class="pagination-list">
       <li>
-        <a class="pagination-previous has-text-weight-bold" href="/"
-          >Newer Posts</a
-        >
+        <button 
+          @click="onNextPage({page: 'previous'})"
+          type="button"
+          class="pagination-previous has-text-weight-bold">Previous</button>
       </li>
       <li>
-        <a class="pagination-link button has-text-weight-bold is-primary"
-          >Page 2 of 5</a
-        >
+        <button
+          type="button" 
+          class="pagination-link button has-text-weight-bold is-primary">Page {{currentPage}}</button>
       </li>
       <li>
-        <a class="pagination-next has-text-weight-bold" href="/page/3/"
-          >Older Posts</a
-        >
+        <button 
+          @click="onNextPage({page: 'next'})"
+          type="button"
+          class="pagination-next has-text-weight-bold">Next</button>
       </li>
     </ul>
   </nav>
 </template>
+
+<script>
+  export default {
+    props: {
+      onNextPage: {
+        type: Function,
+        required: true
+      }
+    },
+    computed: {
+      currentPage() {
+        return this.$store.getters['exchange/currentPage']
+      }
+    }
+  }
+</script>

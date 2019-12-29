@@ -5,6 +5,8 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 import AboutPage from '@/pages/About';
+import ExchangeCreatePage from '@/pages/ExchangeCreate';
+import ExchangeDetailPage from '../pages/ExchangeDetail';
 import FaqPage from '@/pages/Faq';
 import HomePage from '@/pages/Home';
 import LoginPage from '@/pages/Login';
@@ -54,6 +56,17 @@ const router = new Router({
       name: 'ProfilePage',
       component: ProfilePage,
       meta: { onlyAuthUser: true }
+    },
+    {
+      path: '/exchanges/new',
+      name: 'ExchangeCreatePage',
+      component: ExchangeCreatePage,
+      meta: { onlyAuthUser: true }
+    },
+    {
+      path: '/exchanges/:id',
+      name: 'ExchangeDetailPage',
+      component: ExchangeDetailPage
     }
   ]
 });

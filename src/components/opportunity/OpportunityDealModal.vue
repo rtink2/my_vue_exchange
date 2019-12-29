@@ -1,6 +1,7 @@
 <template>
   <app-modal
-    header="Here is an offer"
+    ref="appModal"
+    :header="headerText"
     submitText="Accept Deal">
     <div>
       <h1>User "{{opportunity.fromUser.name}}" has an amazing offer for you!</h1>
@@ -8,7 +9,7 @@
         <div
           class="card-image">
           <figure class="image is-4by3">
-            <!-- TODO: Display Exchange Image -->
+            <!--  Display Exchange Image -->
             <img :src="opportunity.fromExchange.image"/>
           </figure>
         </div>
@@ -35,10 +36,10 @@
         </div>
       </template>
       <hr>
-      <h1>For Yours...</h1>
+      <h1>For Your...</h1>
       <div class="card-image">
         <figure class="image is-4by3">
-          <!-- TODO: Display Exchange Image -->
+          <!--  Display Exchange Image -->
           <img :src="opportunity.toExchange.image"/>
         </figure>
       </div>
@@ -53,14 +54,19 @@
         </div>
       </div>
     </div>
+    <template #openingElement>
+      <button class="button is-fullwidth">View a deal</button>
+    </template>
+
     <template #footerElement>
       <button
         @click="acceptOpportunity(opportunity)"
-        class="button is-success">View Deal</button>
+        class="button is-success">Accept Deal</button>
       <button
         @click="declineOpportunity(opportunity)"
         class="button is-danger">Decline Deal</button>
       <button
+        @click="() => modal.close()"
         class="button">Close</button>
     </template>
   </app-modal>
@@ -73,12 +79,30 @@ export default {
     AppModal
   },
   props: ['opportunity'],
+  computed: {
+    headerText() {
+      return this.opportunity.fromExchange 
+        ? `Here is an offer for a ${this.opportunity.fromExchange.type}`
+        : 'Here is an offer for credits'
+    },
+    modal() {
+      return this.$refs.appModal
+    }
+  },
   methods: {
     acceptOpportunity(opportunity) {
-    
+      this.$store.dispatch('opportunity/acceptOpportunity', opportunity)
+        .then(_ => {
+          this.modal.close()
+          this.$toasted.success('Opportunity has been accepted!', {duration: 3000})
+        }) 
     },
     declineOpportunity(opportunity) {
-     
+     this.$store.dispatch('opportunity/declineOpportunity', opportunity)
+        .then(_ => {
+          this.modal.close()
+          this.$toasted.success('Opportunity has been declined!', {duration: 3000})
+        }) 
     }
   }
 }

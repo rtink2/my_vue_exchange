@@ -1,29 +1,44 @@
 <template>
-  <div>
+  <!-- TODO: Fix displaying of previous product! -->
+  <div v-if="exchange && exchange.id">
     <!-- HEADER -->
     <section class="hero is-black">
       <div class="hero-body">
-        <div class="hero-img"></div>
+        <div class="hero-img">
+        </div>
         <div class="container">
           <div class="columns">
             <div class="column is-9">
               <h1 class="title">
-                Exchange title
+                {{exchange.title}}
               </h1>
               <h2 class="subtitle">
-                Product
+                {{exchange.type}}
               </h2>
 
-              <!-- <div v-if="author" class="user-tile">
+              <!-- TODO: Display creator of exchange -->
+              <div
+                v-if="exchangeUser"
+                class="user-tile"
+              >
                 <div class="user-tile-image">
-                  <figure v-if="author.photoURL" class="image is-64x64">
-                    <img class="is-rounded" :src="author.photoURL">
+                  <figure
+                    v-if="exchangeUser.avatar"
+                    class="image is-64x64"
+                  >
+                    <img
+                      class="is-rounded"
+                      :src="exchangeUser.avatar"
+                    >
                   </figure>
                 </div>
-                <div v-if="author.displayName" class="user-tile-author center">
-                  <h3 class="user-tile-author-name">by {{author.displayName}}</h3>
+                <div
+                  v-if="exchangeUser.fullName"
+                  class="user-tile-author center"
+                >
+                  <h3 class="user-tile-author-name">by {{exchangeUser.fullName}}</h3>
                 </div>
-              </div> -->
+              </div>
             </div>
             <div class="column is-3">
               <div class="column-right">
@@ -32,28 +47,47 @@
                     <figure class="image is-4by2">
                       <!-- Exchange Image -->
                       <img
-                        src="https://via.placeholder.com/350"
+                        :src="exchange.image"
                         alt="Placeholder image"
-                      />
+                      >
                     </figure>
                   </div>
                   <div class="card-content">
                     <div class="content m-b-sm">
                       <div class="media-content">
-                        <!-- <span class="title is-2">${{exchange.value}} /
+                        <span class="title is-2">${{exchange.price}} /
                         </span>
-                        <span class="rate" v-if="exchange.type==='product'">Day</span>
-                        <span class="rate" v-else>Hour</span> -->
-                        <span class="title is-2">$23 / </span>
-                        <span class="rate">Hour</span>
+                        <span
+                          class="rate"
+                          v-if="exchange.type==='product'"
+                        >Total</span>
+                        <span
+                          class="rate"
+                          v-else
+                        >Hour</span>
                       </div>
                     </div>
-                    <a
-                      target="_"
-                      class="button is-fullwidth is-large is-danger is-outlined m-b-sm"
+                    <exchange-deal-modal
+                      v-if="canCreateExchange"
+                      :exchange="exchange"
+                      :offeredExchanges="authUserExchanges"
+                      :onModalSubmit="() => {}"
+                      :fromUser="authUser"
+                    />
+                    <router-link
+                      v-if="!isAuth"
+                      to="/login"
+                      class="button is-fullwidth is-large is-success is-outlined"
                     >
-                      Make a deal
-                    </a>
+                      Login to make an offer
+                    </router-link>
+                    <button
+                      v-if="isExchangeOwner"
+                      disabled
+                      class="button is-fullwidth is-large is-danger is-outlined"
+                    >
+                      Your Exchange
+                    </button>
                     <div class="content">
                       <ul class="m-t-none">
                         <li>
@@ -81,14 +115,14 @@
               <div class="more-details-title">
                 Details
               </div>
-              <div class="more-details-item">Country: Slovakia</div>
-              <div class="more-details-item">City: Bratislava</div>
+              <div class="more-details-item">City: {{exchange.city}}</div>
+              <div class="more-details-item">State: {{exchange.state}}</div>
             </div>
           </div>
           <div class="section product-description p-t-none">
-            <div class="product-description-title">Course Info</div>
+            <div class="product-description-title">Exchange Info</div>
             <div class="product-description-details">
-              <p>Some Desc</p>
+              <p>{{exchange.description}}</p>
             </div>
           </div>
         </div>
@@ -96,6 +130,41 @@
     </div>
   </div>
 </template>
+<script>
+import ExchangeDealModal from "@/components/exchange/ExchangeDealModal";
+export default {
+  components: {
+    ExchangeDealModal
+  },
+  computed: {
+    isAuth() {
+      return this.$store.getters["auth/isAuthenticated"];
+    },
+    exchange() {
+      return this.$store.state.exchange.item;
+    },
+    exchangeUser() {
+      return this.exchange.user || {};
+    },
+    authUser() {
+      return this.$store.state.auth.user;
+    },
+    isExchangeOwner() {
+      return this.$store.getters["auth/isExchangeOwner"](this.exchangeUser.id);
+    },
+    canCreateExchange() {
+      return this.isAuth && !this.isExchangeOwner;
+    },
+    authUserExchanges() {
+      return this.authUser && this.authUser.profile.exchanges;
+    }
+  },
+  created() {
+    const { id } = this.$route.params;
+    this.$store.dispatch("exchange/getExchangeById", id);
+  }
+};
+</script>
 
 <style scoped lang="scss">
 // CARD

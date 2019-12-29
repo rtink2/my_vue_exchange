@@ -1,37 +1,49 @@
 <template>
   <div>
-    <Hero />
+    <hero :onSearch="filterExchanges"/>
     <section class="posts">
       <div class="container">
         <div class="posts-type">Latest Posts</div>
-        <ExchangeList :exchanges="exchanges" />
+        <!-- provides exchanges -->
+       <ExchangeList :exchanges="exchanges" />
       </div>
     </section>
-    <!-- <button @click="$store.dispatch('test')" class="button is-primary">
-      Test Vuex
-    </button> -->
-    <Pagination />
+    <pagination :onNextPage="getMoreExchanges" />
   </div>
 </template>
 
 <script>
-import Hero from '@/components/Hero';
-import Pagination from '@/components/Pagination';
+import Hero from '@/components/Hero'
+import Pagination from '@/components/Pagination'
 import ExchangeList from '@/components/exchange/Exchange_list';
-
 export default {
   components: {
     Hero,
     Pagination,
     ExchangeList
   },
+  data() {
+    return {
+      searchedExchangeTitle: ''
+    }
+  },
   created() {
-    this.$store.dispatch('exchange/bindExchanges');
+    this.$store.dispatch('exchange/getExchanges')
   },
   computed: {
     exchanges() {
-      return this.$store.state.exchange.items;
+      return this.$store.getters['exchange/filteredExchanges'](this.searchedExchangeTitle)
+    }
+  },
+  methods: {
+    getMoreExchanges({page}) {
+      this.$store.dispatch('exchange/getMoreExchanges', {page})
+    },
+    filterExchanges(searched) {
+      this.searchedExchangeTitle = searched 
     }
   }
-};
+}
 </script>
+
+
